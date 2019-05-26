@@ -8,8 +8,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    currentPage:1,
-    pageSize:5
+    currentPage: 1,
+    pageSize: 5,
+    hasData: false
   },
 
   onLoad: function(options) {
@@ -58,7 +59,7 @@ Page({
               app.ajax.post('/message/save', {
                 wishId: that.data.id,
                 mess,
-                nickName:res.userInfo.nickName,
+                nickName: res.userInfo.nickName,
                 avatarUrl: res.userInfo.avatarUrl
               }, function(res) {
                 that.setData({
@@ -81,21 +82,40 @@ Page({
   },
 
   onFresh: function() {
-    wx.showNavigationBarLoading();
     var that = this
     app.ajax.post('/message/get', {
       wishId: that.data.id,
       start: that.data.currentPage,
-      size:that.data.pageSize
+      size: that.data.pageSize
     }, function(res) {
-      that.setData({
-        liuyanlist: res.data,
-        //res代表success函数的事件对，data是固定的，liuyanlist是数组
-      })
-      wx.hideNavigationBarLoading();
-      // 停止下拉动作
-      wx.stopPullDownRefresh();
+      if (that.data.liuyanlist != null && (that.data.liuyanlist.length == res.data.length)) {
+        wx.showToast({
+          title: '没有更多数据啦',
+          icon: 'none',
+          duration: 1000
+        })
+        that.setData({
+          hasData: true
+        })
+      } else {
+        that.setData({
+          liuyanlist: res.data,
+        })
+      }
     })
   },
+
+  onReachBottom() {
+    var that = this
+    var pageSize = that.data.pageSize + 5
+    that.setData({
+      pageSize: pageSize
+    })
+    wx.showLoading({
+      title: '加载中',
+    })
+    that.onFresh()
+    wx.hideLoading()
+  }
 
 })

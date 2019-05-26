@@ -83,3 +83,7 @@
 .wish .wish-content {
   margin: 30rpx;
 }
+.bottom-content{
+  font-size: 18px;
+  margin-left: 250rpx;
+}
