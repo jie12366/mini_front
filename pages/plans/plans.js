@@ -95,12 +95,18 @@ Page({
             split = that.data.value.split("/");
             let molecular = split[0];
             let denominator = split[1];
-            let a = parseFloat(molecular);
-            let b = parseFloat(denominator);
-            let pro = (a / b).toFixed(2) * 100 +'%'
-            that.setData({
-              date_progress: pro
-            })
+            if (denominator == 0) {
+              that.setData({
+                date_progress: 0 + "%"
+              })
+            } else {
+              let a = parseFloat(molecular);
+              let b = parseFloat(denominator);
+              let pro = (a / b).toFixed(2) * 100 + '%'
+              that.setData({
+                date_progress: pro
+              })
+            }
           }
         })
       }

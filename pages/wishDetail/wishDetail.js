@@ -41,43 +41,45 @@ Page({
   formSubmit: function(e) {
     var that = this;
     var mess = e.detail.value.liuyantext; //获取表单所有name=liuyantext的值 
-    if (mess == null) {
+    if (mess == "") {
       wx.showToast({
         title: '留言不能为空',
+        icon:'none',
+        duration:1000
       })
-      return
-    }
-    wx.showLoading({
-      title: '正在留言',
-    })
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          wx.getUserInfo({
-            success: function(res) {
-              app.ajax.post('/message/save', {
-                wishId: that.data.id,
-                mess,
-                nickName: res.userInfo.nickName,
-                avatarUrl: res.userInfo.avatarUrl
-              }, function(res) {
-                that.setData({
-                  re: res.data,
+    } else {
+      wx.showLoading({
+        title: '正在留言',
+      })
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            wx.getUserInfo({
+              success: function(res) {
+                app.ajax.post('/message/save', {
+                  wishId: that.data.id,
+                  mess,
+                  nickName: res.userInfo.nickName,
+                  avatarUrl: res.userInfo.avatarUrl
+                }, function(res) {
+                  that.setData({
+                    re: res.data,
+                  })
+                  wx.showToast({
+                    title: '已留言',
+                    icon: 'success',
+                    time: '2000'
+                  })
+                  wx.hideLoading()
+                  that.onFresh()
                 })
-                wx.showToast({
-                  title: '已留言',
-                  icon: 'success',
-                  time: '2000'
-                })
-                wx.hideLoading()
-                that.onFresh()
-              })
-            }
-          })
+              }
+            })
+          }
         }
-      }
-    })
+      })
+    }
 
   },
 

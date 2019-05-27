@@ -10,7 +10,7 @@
     </view>
 
     <view class="cover" wx:if="{{first==false}}" bindtap="chooseImg">
-          <image class="chooseImgSrc" src="{{chooseImgSrc}}" ></image>
+          <image class="chooseImgSrc" mode='aspectFill' src="{{chooseImgSrc}}" ></image>
     </view>
 
 

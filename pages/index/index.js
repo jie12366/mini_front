@@ -18,6 +18,7 @@ Page({
     words_hidden: true,
     nullPlan: true,
     progress: 0,
+    progress1: 0,
     message: '',
     value: '',
     marqueePace: 1,
@@ -132,11 +133,20 @@ Page({
             split = that.data.value.split("/");
             let molecular = split[0];
             let denominator = split[1];
-            let a = parseFloat(molecular);
-            let b = parseFloat(denominator);
-            that.setData({
-              progress: (a / b) * 100 + '%'
-            })
+            if (denominator == 0) {
+              that.setData({
+                progress: 0 + '%',
+                progress1: 0
+              })
+            } else {
+              let a = parseFloat(molecular);
+              let b = parseFloat(denominator);
+              that.setData({
+                progress: (a / b).toFixed(2) * 100 + '%',
+                progress1: (a / b).toFixed(2)
+              })
+            }
+
           }
         })
       }
@@ -164,7 +174,7 @@ Page({
     cxt_arc.setStrokeStyle('#3ea6ff');
     cxt_arc.setLineCap('round')
     cxt_arc.beginPath();
-    cxt_arc.arc(105, 60, 50, -Math.PI * 1 / 2, 2 * Math.PI * that.data.progress - Math.PI * 1 / 2, false);
+    cxt_arc.arc(105, 60, 50, -Math.PI * 1 / 2, 2 * Math.PI * that.data.progress1 - Math.PI * 1 / 2, false);
     cxt_arc.stroke();
     cxt_arc.draw();
 

@@ -23,12 +23,15 @@ Page({
             nickName: res.userInfo.nickName,
             content: that.data.plan
           }, function(res) {
+            wx.hideLoading()
             wx.showToast({
               title: '添加完成',
               icon: 'success',
               duration: 2000
             })
-            wx.hideLoading()
+            wx.navigateBack({
+              
+            })
             that.setData({
               plan: ''
             })
